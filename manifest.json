@@ -10,12 +10,11 @@
   },
 
   "action": {
-    "default_icon": "/icons/document.png",
-    "default_popup": "/popup.html"
+    "default_icon": "/icons/document.png"
   },
 
   "background": {
-    "service_worker": "/scripts/background.js"
+    "service_worker": "/scripts/darkmode.js"
   },
 
   "permissions": [

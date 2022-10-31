@@ -6,26 +6,28 @@ document.addEventListener("DOMContentLoaded", () => {
         // set extension badge as a checkmark to signify dark mode was applied to the user
         chrome.action.setBadgeText({text: text});
         // or: chrome.action.setBadgeText({tabId: info.tadId, text: '✓'});
-    
-        // allow the extension badge to remain as a checkmark for 1 second before removing it
-        setTimeout(function () {
-            chrome.action.setBadgeText({text: ''});
-        }, 500);
-    
     };
 
     // get the current tab
     chrome.tabs.query({currentWindow: true, active: true}, function (tabs) {
 
         // retrieve the last 4 letters of the tab URL
-        let url = tabs[0].url.slice(-4);
+        let tabId = tabs[0].id;
+        let url = new URL(tabs[0].url);
+        let extension = url.pathname.split('.').pop();
         
-        if (url === ".pdf") {
-                
+        if (extension === "pdf") {
+            console.log("ACTIVATING DARK MODE BBB");
+            
             // execute the dark mode script the moment the extension icon is clicked
-            chrome.scripting.executeScript({target: {tabId: tabs[0].id}, files: ["scripts/toggle.js"]});
-            setBadge('✓');
-
+            
+            chrome.scripting.executeScript({
+                target: { tabId },
+                func: setDarkMode,
+                args: [ true ],
+            });
+            
+            setBadge('1');
         }
 
         else
