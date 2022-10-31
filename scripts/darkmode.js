@@ -87,16 +87,16 @@ async function onCommand(command) {
     }
 };
 
-function onActivated(info) {
-    chrome.tabs.get(info.tabId, function (tab) {
-        let url = new URL(tab.url);
-        let extension = url.pathname.split('.').pop();
-        if (extension === 'pdf') {
-            removeToolbarForTabId(info.tabId);
-            setDarkModeForTabId(info.tabId, DarkModeEnable);
-        }
-    });
-};
+// function onActivated(info) {
+//     chrome.tabs.get(info.tabId, function (tab) {
+//         let url = new URL(tab.url);
+//         let extension = url.pathname.split('.').pop();
+//         if (extension === 'pdf') {
+//             removeToolbarForTabId(info.tabId);
+//             setDarkModeForTabId(info.tabId, DarkModeEnable);
+//         }
+//     });
+// };
 
 function onUpdated(tabId, changeInfo, tab) {
     let url = new URL(tab.url);
@@ -114,6 +114,8 @@ function onClicked(tab) {
 if (chrome !== undefined) {
     chrome.commands.onCommand.addListener(onCommand);
     chrome.tabs.onUpdated.addListener(onUpdated);
-    chrome.tabs.onActivated.addListener(onActivated);
+    // Disabling onActivated because it re-enables dark mode when switching back to a tab,
+    // after the user may have previously disabled dark mode on that tab.
+    // chrome.tabs.onActivated.addListener(onActivated);
     chrome.action.onClicked.addListener(onClicked);
 }
